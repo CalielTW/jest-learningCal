@@ -1,9 +1,10 @@
+import React from "react";
 import "./App.css";
-import { Calculator } from "./components/Calculator";
+import Calculator from "./compentes/Calculator";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{ padding: "30px" }}>
       <Calculator />
     </div>
   );
