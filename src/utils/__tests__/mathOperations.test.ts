@@ -34,3 +34,10 @@ it("division de numeros", () => {
   const result = divide(number1, number2);
   expect(result).toBe(number1 / number2);
 });
+
+it("division de numeros en caso de 0", () => {
+  const number1 = getRandomInt(100);
+  const number2 = 0;
+  const result = divide(number1, number2);
+  expect(result).toBe(number1 / number2);
+});
