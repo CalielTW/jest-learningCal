@@ -1,29 +1,59 @@
-import { useEffect, useState } from "react";
+import React from "react";
+import { operation } from "../utils/mathOperations";
+
+const styles = {
+  input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
+  select: { margin: 10, height: 50, fontSize: 20, padding: 10 },
+  result: { margin: 10, height: 25, fontSize: 40, padding: 10 },
+};
 
 export const Calculator = () => {
-  const [a, setA] = useState<number>();
-  const [b, setB] = useState<number>();
-  const [operation, setOperation] = useState<string>();
-  const [result, setResult] = useState<string>();
+  const [data, setData] = React.useState({
+    a: 1,
+    b: 1,
+    result: 1,
+    operation: "sum",
+  });
 
-  // TODO: Call operation
-  useEffect(() => {
-    // operation
-    // const result = operation(a,b);
-    setResult(result);
-  }, [a, b, operation]);
+  React.useEffect(() => {
+    const res = operation(data.a, data.b, data.operation);
+    setData({ ...data, result: res });
+  }, [data.a, data.b, data.operation]);
+
+  const handleChange = (v: any) =>
+    setData({ ...data, [v.target.name]: parseInt(v.target.value) });
+
+  const handleSelect = (v: any) =>
+    setData({ ...data, [v.target.name]: v.target.value });
 
   return (
     <div data-testid="calculator">
-      <input type="text" data-testid="a"></input>
-      <input type="text" data-testid="b"></input>
-      <select>
+      <h1>Simple calculator</h1>
+      <input
+        style={styles.input}
+        onChange={handleChange}
+        name="a"
+        type="text"
+        data-testid="a"
+      ></input>
+      <input
+        style={styles.input}
+        onChange={handleChange}
+        name="b"
+        type="text"
+        data-testid="b"
+      ></input>
+      <select style={styles.select} onChange={handleSelect} name="operation">
         <option value="sum">Sum</option>
         <option value="substract">Substract</option>
-        <option value="multiplication">Multiplication</option>
         <option value="divide">Divide</option>
+        <option value="multiply">Multiply</option>
       </select>
-      <div data-testid="result">{result}</div>
+      {data.result !== null && (
+        <div style={styles.result} data-testid="result">
+          Result: {data.result}
+        </div>
+      )}
     </div>
   );
 };

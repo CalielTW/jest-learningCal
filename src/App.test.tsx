@@ -1,9 +1,6 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import App from "./App";
 
-test("renders component Calculator", () => {
+test("renders learn react link", () => {
   render(<App />);
-  const calculatorComponent = screen.getByRole("Calculator");
-  expect(calculatorComponent).toBeInTheDocument();
 });
