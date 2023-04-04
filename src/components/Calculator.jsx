@@ -9,9 +9,9 @@ const styles = {
 
 export const Calculator = () => {
   const [data, setData] = React.useState({
-    a: 1,
-    b: 1,
-    result: 1,
+    a: null,
+    b: null,
+    result: null,
     operation: "sum",
   });
 
@@ -20,10 +20,10 @@ export const Calculator = () => {
     setData({ ...data, result: res });
   }, [data.a, data.b, data.operation]);
 
-  const handleChange = (v: any) =>
+  const handleChange = (v) =>
     setData({ ...data, [v.target.name]: parseInt(v.target.value) });
 
-  const handleSelect = (v: any) =>
+  const handleSelect = (v) =>
     setData({ ...data, [v.target.name]: v.target.value });
 
   return (
@@ -43,7 +43,12 @@ export const Calculator = () => {
         type="text"
         data-testid="b"
       ></input>
-      <select style={styles.select} onChange={handleSelect} name="operation">
+      <select
+        style={styles.select}
+        onChange={handleSelect}
+        name="operation"
+        data-testid="operator"
+      >
         <option value="sum">Sum</option>
         <option value="substract">Substract</option>
         <option value="divide">Divide</option>

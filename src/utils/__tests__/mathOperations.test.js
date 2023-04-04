@@ -1,6 +1,6 @@
 import { sum, substract, multiply, divide } from "../mathOperations";
 
-function getRandomInt(max: number) {
+function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
