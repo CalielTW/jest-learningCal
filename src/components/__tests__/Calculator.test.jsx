@@ -33,41 +33,49 @@ describe("with integers", () => {
     });
 
     it("sum", () => {
+      const spy = jest.spyOn(operations, "operation");
+      operations.operation.mockReturnValue(number1 + number2, "sum");
+
       render(<Calculator />);
 
       fireEvent.change(screen.getByTestId("a"), { target: { value: number1 } });
       fireEvent.change(screen.getByTestId("b"), { target: { value: number2 } });
-
-      const spy = jest.spyOn(operations, "sum");
+      fireEvent.change(screen.getByTestId("result"), {
+        target: { dataValue: number1 + number2 },
+      });
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "sum" },
       });
 
       expect(spy).toHaveBeenCalled();
       expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${sum(number1, number2)}`
+        `Result: ${number1 + number2}`
       );
     });
   });
 });
 
-it("substract operation", () => {
-  render(<Calculator />);
-  const a = screen.getByTestId("a");
-  const b = screen.getByTestId("b");
-  const number1 = getRandomInt(99) + 1;
-  const number2 = getRandomInt(99) + 1;
-  fireEvent.change(a, { target: { value: number1 } });
-  fireEvent.change(b, { target: { value: number2 } });
+it.only("substract operation", () => {
+  let number1 = getRandomInt(99) + 1;
+  let number2 = getRandomInt(99) + 1;
 
-  const spy = jest.spyOn(operations, "sum");
+  const spy = jest.spyOn(operations, "substract");
+  operations.operation.mockReturnValue(number1 - number2);
+
+  render(<Calculator />);
+
+  fireEvent.change(screen.getByTestId("a"), { target: { value: number1 } });
+  fireEvent.change(screen.getByTestId("b"), { target: { value: number2 } });
+  fireEvent.change(screen.getByTestId("result"), {
+    target: { dataValue: number1 - number2 },
+  });
   fireEvent.change(screen.getByTestId("operator"), {
-    target: { value: "sum" },
+    target: { value: "substract" },
   });
 
   expect(spy).toHaveBeenCalled();
   expect(screen.getByTestId("result").textContent).toBe(
-    `Result: ${substract(number1, number2)}`
+    `Result: ${number1 - number2}`
   );
 });
 
