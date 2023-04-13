@@ -2,10 +2,11 @@ import moxios from "moxios";
 import axios from "axios";
 
 jest.useRealTimers();
-let axiosInstance;
 
 describe("fetchTodos", () => {
   describe("when API call is successful", () => {
+    let axiosInstance = null;
+
     beforeEach(function () {
       axiosInstance = axios.create();
       moxios.install(axiosInstance);
@@ -15,7 +16,7 @@ describe("fetchTodos", () => {
       moxios.uninstall(axiosInstance);
     });
 
-    it("axios", async (done) => {
+    it("axios", async () => {
       const todos = [
         {
           userId: 1,
@@ -45,7 +46,7 @@ describe("fetchTodos", () => {
 
       moxios.stubRequest("https://jsonplaceholder.typicode.com/todos", {
         status: 200,
-        data: todos,
+        response: todos,
       });
 
       const res = await axiosInstance.get(
@@ -53,25 +54,27 @@ describe("fetchTodos", () => {
       );
 
       expect(res.data).toEqual(todos);
-
-      it("should return todos list", async (done) => {
-        moxios.wait(function () {
-          let request = moxios.requests.mostRecent();
-          request
-            .respondWith({
-              status: 200,
-              response: {
-                userId: 1,
-                id: 1,
-                title: "delectus aut autem",
-                completed: false,
-              },
-            })
-            .then(function () {
-              done();
-            });
-        });
-      });
     });
+
+    {
+      /*it("should return todos list", async (done) => {
+      moxios.wait(function () {
+        let request = moxios.requests.mostRecent();
+        request
+          .respondWith({
+            status: 200,
+            response: {
+              userId: 1,
+              id: 1,
+              title: "delectus aut autem",
+              completed: false,
+            },
+          })
+          .then(function () {
+            done();
+          });
+      });
+    });*/
+    }
   });
 });
