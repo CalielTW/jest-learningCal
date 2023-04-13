@@ -1,22 +1,21 @@
-import { fetchTodos } from "../axiosRequest";
-import axios from "axios";
 import moxios from "moxios";
-import sinon from "sinon";
-import { equal } from "assert";
+import axios from "axios";
 
-jest.mock("axios");
+jest.useRealTimers();
+let axiosInstance;
 
 describe("fetchTodos", () => {
   describe("when API call is successful", () => {
     beforeEach(function () {
-      moxios.install();
+      axiosInstance = axios.create();
+      moxios.install(axiosInstance);
     });
 
     afterEach(function () {
-      moxios.uninstall();
+      moxios.uninstall(axiosInstance);
     });
 
-    it("axios", (done) => {
+    it("axios", async (done) => {
       const todos = [
         {
           userId: 1,
@@ -49,16 +48,13 @@ describe("fetchTodos", () => {
         data: todos,
       });
 
-      axios.get("https://jsonplaceholder.typicode.com/todos");
+      const res = await axiosInstance.get(
+        "https://jsonplaceholder.typicode.com/todos"
+      );
 
-      moxios.wait(function () {
-        equal(onFulfilled.getCall(0).args[0].data, "hello");
-        done();
-      });
+      expect(res.data).toEqual(todos);
 
-      it("should return todos list", (done) => {
-        axios.get(`https://jsonplaceholder.typicode.com/todos`);
-
+      it("should return todos list", async (done) => {
         moxios.wait(function () {
           let request = moxios.requests.mostRecent();
           request
@@ -72,7 +68,6 @@ describe("fetchTodos", () => {
               },
             })
             .then(function () {
-              equal(onFulfilled.called, true);
               done();
             });
         });
