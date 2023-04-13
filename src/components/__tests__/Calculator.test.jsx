@@ -34,7 +34,7 @@ describe("with integers", () => {
 
     var createMock = jest.fn();
 
-    it("sum", () => {
+    it("sum operation", () => {
       const spy = jest.spyOn(operations, "operation");
       operations.operation.mockReturnValue(number1 + number2);
 
@@ -57,7 +57,7 @@ describe("with integers", () => {
     });
 
     it("substract operation", () => {
-      const spy = jest.spyOn(operations, "substract");
+      const spy = jest.spyOn(operations, "operation");
       operations.operation.mockReturnValue(number1 - number2);
 
       render(<Calculator />);
@@ -71,56 +71,77 @@ describe("with integers", () => {
         target: { value: "substract" },
       });
 
-      //expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalled();
 
       expect(screen.getByTestId("result").textContent).toBe(
         `Result: ${operations.operation(number1, number2, "substract")}`
       );
     });
+
+    it("multiply operation", () => {
+      const spy = jest.spyOn(operations, "operation");
+      operations.operation.mockReturnValue(number1 * number2);
+
+      render(<Calculator />);
+
+      fireEvent.change(screen.getByTestId("a"), { target: { value: number1 } });
+      fireEvent.change(screen.getByTestId("b"), { target: { value: number2 } });
+      fireEvent.change(screen.getByTestId("result"), {
+        target: { dataValue: number1 * number2 },
+      });
+      fireEvent.change(screen.getByTestId("operator"), {
+        target: { value: "multiply" },
+      });
+
+      expect(spy).toHaveBeenCalled();
+
+      expect(screen.getByTestId("result").textContent).toBe(
+        `Result: ${operations.operation(number1, number2, "multiply")}`
+      );
+    });
+
+    it("divide operation", () => {
+      const spy = jest.spyOn(operations, "operation");
+      operations.operation.mockReturnValue(number1 / number2);
+
+      render(<Calculator />);
+
+      fireEvent.change(screen.getByTestId("a"), { target: { value: number1 } });
+      fireEvent.change(screen.getByTestId("b"), { target: { value: number2 } });
+      fireEvent.change(screen.getByTestId("result"), {
+        target: { dataValue: number1 / number2 },
+      });
+      fireEvent.change(screen.getByTestId("operator"), {
+        target: { value: "divide" },
+      });
+
+      expect(spy).toHaveBeenCalled();
+
+      expect(screen.getByTestId("result").textContent).toBe(
+        `Result: ${operations.operation(number1, number2, "divide")}`
+      );
+    });
+
+    it("divide by 0 operation", () => {
+      const spy = jest.spyOn(operations, "operation");
+      operations.operation.mockReturnValue(number1 / 0);
+
+      render(<Calculator />);
+
+      fireEvent.change(screen.getByTestId("a"), { target: { value: number1 } });
+      fireEvent.change(screen.getByTestId("b"), { target: { value: 0 } });
+      fireEvent.change(screen.getByTestId("result"), {
+        target: { dataValue: number1 / 0 },
+      });
+      fireEvent.change(screen.getByTestId("operator"), {
+        target: { value: "divide" },
+      });
+
+      expect(spy).toHaveBeenCalled();
+
+      expect(() => {
+        divide(number1, 0);
+      }).toThrowError("You cant divide by 0");
+    });
   });
 });
-
-{
-  /*it("multiply operation", () => {
-  render(<Calculator />);
-  const a = screen.getByTestId("a");
-  const b = screen.getByTestId("b");
-  const number1 = getRandomInt(99) + 1;
-  const number2 = getRandomInt(99) + 1;
-  fireEvent.change(a, { target: { value: number1 } });
-  fireEvent.change(b, { target: { value: number2 } });
-  const spy = jest.spyOn(operations, "multiply");
-  const multiplicacion = multiply(number1, number2);
-
-  expect(spy).toHaveBeenCalled();
-  expect(multiplicacion).toBe(number1 * number2);
-});
-
-it("divide operation", () => {
-  render(<Calculator />);
-  const a = screen.getByTestId("a");
-  const b = screen.getByTestId("b");
-  const number1 = getRandomInt(99) + 1;
-  const number2 = getRandomInt(99) + 1;
-  fireEvent.change(a, { target: { value: number1 } });
-  fireEvent.change(b, { target: { value: number2 } });
-  const spy = jest.spyOn(operations, "divide");
-  const division = divide(number1, number2);
-
-  expect(spy).toHaveBeenCalled();
-  expect(division).toBe(number1 / number2);
-});
-
-it("divide by 0 operation", () => {
-  render(<Calculator />);
-  const a = screen.getByTestId("a");
-  const number1 = getRandomInt(99) + 1;
-  fireEvent.change(a, { target: { value: number1 } });
-  const spy = jest.spyOn(operations, "divide");
-
-  expect(spy).toHaveBeenCalled();
-  expect(() => {
-    divide(number1, 0);
-  }).toThrowError("You cant divide by 0");
-});*/
-}
