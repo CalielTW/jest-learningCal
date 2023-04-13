@@ -1,4 +1,4 @@
-import { fetchTodos } from "../../utils/axiosRequest";
+import { fetchTodos } from "../axiosRequest";
 import axios from "axios";
 import moxios from "moxios";
 import sinon from "sinon";
@@ -49,8 +49,7 @@ describe("fetchTodos", () => {
         data: todos,
       });
 
-      let onFulfilled = sinon.spy();
-      axios.get("https://jsonplaceholder.typicode.com/todos").then(onFulfilled);
+      axios.get("https://jsonplaceholder.typicode.com/todos");
 
       moxios.wait(function () {
         equal(onFulfilled.getCall(0).args[0].data, "hello");
@@ -58,11 +57,7 @@ describe("fetchTodos", () => {
       });
 
       it("should return todos list", (done) => {
-        let onFulfilled = sinon.spy();
-
-        axios
-          .get(`https://jsonplaceholder.typicode.com/todos`)
-          .then(onFulfilled);
+        axios.get(`https://jsonplaceholder.typicode.com/todos`);
 
         moxios.wait(function () {
           let request = moxios.requests.mostRecent();
@@ -85,14 +80,3 @@ describe("fetchTodos", () => {
     });
   });
 });
-
-{
-  /*moxios.withMock(function () {
-  axios.get.mockResolvedValueOnce(todos);
-  const result = await fetchTodos();
-  expect(axios.get).toHaveBeenCalledWith(
-    `https://jsonplaceholder.typicode.com/todos`
-  );
-  expect(result).toEqual(todos);
-});*/
-}
